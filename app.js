@@ -981,24 +981,29 @@ const App = {
     this.renderBrowse();
   },
 
-  // --- Audio (Web Speech API) ---
+  // --- Audio (Qwen3 TTS pre-generated) ---
 
   speak(text) {
-    if (!("speechSynthesis" in window)) {
-      this.toast("Speech not supported in this browser");
-      return;
-    }
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = "zh-CN";
-    utterance.rate = 0.8;
-
-    // Try to find a Chinese voice
-    const voices = speechSynthesis.getVoices();
-    const zhVoice = voices.find(v => v.lang.startsWith("zh"));
-    if (zhVoice) utterance.voice = zhVoice;
-
-    speechSynthesis.cancel();
-    speechSynthesis.speak(utterance);
+    // Use pre-generated Qwen3 TTS audio files (Serena voice)
+    const char = text.trim();
+    const audioPath = `audio/${encodeURIComponent(char)}.mp3`;
+    const audio = new Audio(audioPath);
+    audio.onerror = () => {
+      // Fallback to Web Speech API if audio file not found
+      if (!("speechSynthesis" in window)) {
+        this.toast("Audio not available");
+        return;
+      }
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = "zh-CN";
+      utterance.rate = 0.8;
+      const voices = speechSynthesis.getVoices();
+      const zhVoice = voices.find(v => v.lang.startsWith("zh"));
+      if (zhVoice) utterance.voice = zhVoice;
+      speechSynthesis.cancel();
+      speechSynthesis.speak(utterance);
+    };
+    audio.play();
   },
 
   // --- Writing Practice ---
