@@ -692,8 +692,12 @@ const App = {
   switchView(viewName) {
     document.querySelectorAll(".nav-tab").forEach(t => t.classList.remove("active"));
     document.querySelector(`.nav-tab[data-view="${viewName}"]`).classList.add("active");
-    document.querySelectorAll(".view").forEach(v => v.classList.remove("active"));
+    document.querySelectorAll(".view").forEach(v => {
+      v.classList.remove("active");
+      v.classList.add("hidden");
+    });
     const view = document.getElementById(`view-${viewName}`);
+    view.classList.remove("hidden");
     view.classList.add("active");
 
     if (viewName === "browse") this.renderBrowse();
