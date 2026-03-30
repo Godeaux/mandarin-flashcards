@@ -15,7 +15,9 @@ const DEFAULT_DECK = [
     mnemonic: "Three peaks rising up — it literally looks like a mountain range! The middle peak is tallest, with two smaller ones on each side.",
     visual: "⛰️  /|\\ \n /|\\ ",
     soundBridge: "\"shān\" sounds like \"shun\" — you shun the difficult climb up the mountain",
-    radicals: "Radical: 山 (mountain) — this IS the radical"
+    radicals: "Radical: 山 (mountain) — this IS the radical",
+    exampleSentence: "我喜欢爬山。",
+    exampleBreakdown: "I (我 wǒ) like (喜欢 xǐhuān) climbing (爬 pá) mountains (山 shān)"
   },
   {
     id: "shui3", char: "水", pinyin: "shuǐ", meaning: "water",
@@ -23,7 +25,9 @@ const DEFAULT_DECK = [
     mnemonic: "Imagine a river flowing: the central stroke is the current, and the side strokes are splashing water droplets.",
     visual: "💧 ~≈~ 💧",
     soundBridge: "\"shuǐ\" sounds like \"shway\" — water sways in the river",
-    radicals: "Radical: 水/氵(water)"
+    radicals: "Radical: 水/氵(water)",
+    exampleSentence: "请给我一杯水。",
+    exampleBreakdown: "please (请 qǐng) give me (给我 gěiwǒ) one (一 yī) cup (杯 bēi) water (水 shuǐ)"
   },
   {
     id: "huo3", char: "火", pinyin: "huǒ", meaning: "fire",
@@ -31,7 +35,9 @@ const DEFAULT_DECK = [
     mnemonic: "A person with arms up in alarm, surrounded by flames! The two outer dots are sparks flying off the central blaze.",
     visual: "🔥 \\ | / 🔥",
     soundBridge: "\"huǒ\" sounds like \"hwo\" — whoah, fire!",
-    radicals: "Radical: 火/灬 (fire)"
+    radicals: "Radical: 火/灬 (fire)",
+    exampleSentence: "我们去吃火锅。",
+    exampleBreakdown: "we (我们 wǒmen) go (去 qù) eat (吃 chī) fire (火 huǒ) pot (锅 guō)"
   },
   {
     id: "mu4", char: "木", pinyin: "mù", meaning: "tree / wood",
@@ -39,7 +45,9 @@ const DEFAULT_DECK = [
     mnemonic: "A tree with its trunk going straight up, branches spreading at the top, and roots reaching down into the soil.",
     visual: "🌳  十\n / \\",
     soundBridge: "\"mù\" — \"moo,\" the cow stands under the tree",
-    radicals: "Radical: 木 (tree) — this IS the radical"
+    radicals: "Radical: 木 (tree) — this IS the radical",
+    exampleSentence: "山上有很多树木。",
+    exampleBreakdown: "mountain (山上 shānshàng) have (有 yǒu) very many (很多 hěnduō) trees (树木 shùmù)"
   },
   {
     id: "ri4", char: "日", pinyin: "rì", meaning: "sun / day",
@@ -47,7 +55,9 @@ const DEFAULT_DECK = [
     mnemonic: "A window showing the sun! The ancient form was a circle with a dot (☉), which squared off into this box with a line through it.",
     visual: "☀️ [—] ☀️",
     soundBridge: "\"rì\" sounds like \"ree\" — the sun makes you say \"really bright!\"",
-    radicals: "Radical: 日 (sun) — this IS the radical"
+    radicals: "Radical: 日 (sun) — this IS the radical",
+    exampleSentence: "今日是个好日子。",
+    exampleBreakdown: "today (今日 jīnrì) is (是 shì) a good (好 hǎo) day (日子 rìzi)"
   },
   {
     id: "yue4", char: "月", pinyin: "yuè", meaning: "moon / month",
@@ -55,7 +65,9 @@ const DEFAULT_DECK = [
     mnemonic: "A crescent moon! The opening on the side lets moonlight spill through. Also means 'month' because the moon cycles monthly.",
     visual: "🌙 ( ) 🌙",
     soundBridge: "\"yuè\" sounds like \"you-eh\" — \"you, eh, look at that moon!\"",
-    radicals: "Radical: 月 (moon/flesh)"
+    radicals: "Radical: 月 (moon/flesh)",
+    exampleSentence: "雨停了，我看到月亮。",
+    exampleBreakdown: "rain (雨 yǔ) stopped (停了 tíngle) I (我 wǒ) see (看到 kàndào) moon (月亮 yuèliàng)"
   },
   {
     id: "yu3", char: "雨", pinyin: "yǔ", meaning: "rain",
@@ -63,7 +75,9 @@ const DEFAULT_DECK = [
     mnemonic: "The top horizontal line is the sky, the box below is a cloud, and the four dots are raindrops falling down!",
     visual: "☁️ . . . . 🌧️",
     soundBridge: "\"yǔ\" sounds like \"you\" — the rain falls on YOU",
-    radicals: "Radical: 雨 (rain) — this IS the radical"
+    radicals: "Radical: 雨 (rain) — this IS the radical",
+    exampleSentence: "突然下雨了。",
+    exampleBreakdown: "suddenly (突然 tūrán) start (下 xià) rain (雨 yǔ)"
   },
   {
     id: "tian2", char: "田", pinyin: "tián", meaning: "field",
@@ -71,7 +85,9 @@ const DEFAULT_DECK = [
     mnemonic: "A bird's-eye view of rice paddies divided into four neat plots by paths crossing through them.",
     visual: "🌾 [+] 🌾",
     soundBridge: "\"tián\" sounds like \"tee-en\" — tee off into the open field",
-    radicals: "Radical: 田 (field) — this IS the radical"
+    radicals: "Radical: 田 (field) — this IS the radical",
+    exampleSentence: "山下是绿色的田。",
+    exampleBreakdown: "below the mountain (山下 shānxià) is (是 shì) green (绿色的 lǜsède) field (田 tián)"
   },
   {
     id: "shi2", char: "石", pinyin: "shí", meaning: "stone / rock",
@@ -79,7 +95,9 @@ const DEFAULT_DECK = [
     mnemonic: "A cliff face (厂) with a solid mouth-shaped rock (口) sitting at its base. Stone cold and immovable!",
     visual: "🪨  厂\n    口",
     soundBridge: "\"shí\" sounds like \"sure\" — solid as a rock, for sure!",
-    radicals: "Radical: 石 (stone) — this IS the radical"
+    radicals: "Radical: 石 (stone) — this IS the radical",
+    exampleSentence: "路上有大石头。",
+    exampleBreakdown: "road (路上 lùshàng) have (有 yǒu) big (大 dà) stone (石头 shítou)"
   },
   {
     id: "feng1", char: "风", pinyin: "fēng", meaning: "wind",
@@ -87,7 +105,9 @@ const DEFAULT_DECK = [
     mnemonic: "An outer frame like a sail catching the wind, with a swirl (㐅) of air spinning inside it.",
     visual: "🌬️ 〔 × 〕💨",
     soundBridge: "\"fēng\" sounds like \"fung\" — the wind goes whoooosh through the fungus forest",
-    radicals: "Simplified from 風. Contains 几 (table/bench frame)"
+    radicals: "Simplified from 風. Contains 几 (table/bench frame)",
+    exampleSentence: "山上的风很大。",
+    exampleBreakdown: "mountaintop (山上的 shānshàngde) wind (风 fēng) very (很 hěn) strong (大 dà)"
   },
 
   // --- People/Body ---
@@ -97,7 +117,9 @@ const DEFAULT_DECK = [
     mnemonic: "A person walking! Two legs mid-stride, leaning forward with purpose. The simplest picture of a human in motion.",
     visual: "🚶 / \\",
     soundBridge: "\"rén\" sounds like \"run\" — a person running",
-    radicals: "Radical: 人/亻 (person) — this IS the radical"
+    radicals: "Radical: 人/亻 (person) — this IS the radical",
+    exampleSentence: "街上人很多。",
+    exampleBreakdown: "street (街上 jiēshàng) people (人 rén) very (很 hěn) many (多 duō)"
   },
   {
     id: "da4", char: "大", pinyin: "dà", meaning: "big / large",
@@ -105,7 +127,9 @@ const DEFAULT_DECK = [
     mnemonic: "A person (人) stretching their arms out wide to show how BIG something is! \"It was THIS big!\"",
     visual: "🙆 — | —",
     soundBridge: "\"dà\" sounds like \"dah\" — \"Ta-dah! Look how BIG!\"",
-    radicals: "Radical: 大 (big) — person 人 with arms spread"
+    radicals: "Radical: 大 (big) — person 人 with arms spread",
+    exampleSentence: "这个城市很大。",
+    exampleBreakdown: "this (这个 zhège) city (城市 chéngshì) very (很 hěn) big (大 dà)"
   },
   {
     id: "xiao3", char: "小", pinyin: "xiǎo", meaning: "small / little",
@@ -113,7 +137,9 @@ const DEFAULT_DECK = [
     mnemonic: "A tiny thing being split into even smaller pieces — the vertical line divides, and the two dots are the tiny fragments flying apart.",
     visual: "🤏 ·|·",
     soundBridge: "\"xiǎo\" sounds like \"sh-ow\" — \"shh, it's so small!\"",
-    radicals: "Radical: 小 (small)"
+    radicals: "Radical: 小 (small)",
+    exampleSentence: "我找到一个小店。",
+    exampleBreakdown: "I (我 wǒ) find (找到 zhǎodào) one (一个 yígè) small (小 xiǎo) shop (店 diàn)"
   },
   {
     id: "kou3", char: "口", pinyin: "kǒu", meaning: "mouth",
@@ -121,7 +147,9 @@ const DEFAULT_DECK = [
     mnemonic: "An open mouth, ready to speak! A perfect square opening. Simple as that — open wide and say \"ahh\"!",
     visual: "👄 [ ] 😮",
     soundBridge: "\"kǒu\" sounds like \"co\" — open your mouth and co-mmunicate",
-    radicals: "Radical: 口 (mouth) — this IS the radical"
+    radicals: "Radical: 口 (mouth) — this IS the radical",
+    exampleSentence: "门口有人在等。",
+    exampleBreakdown: "doorway (门口 ménkǒu) have (有 yǒu) people (人 rén) waiting (在等 zàiděng)"
   },
   {
     id: "shou3", char: "手", pinyin: "shǒu", meaning: "hand",
@@ -129,7 +157,9 @@ const DEFAULT_DECK = [
     mnemonic: "The horizontal lines are fingers, and the vertical stroke with a hook is the palm and wrist. A hand reaching out!",
     visual: "✋ ≡ |",
     soundBridge: "\"shǒu\" sounds like \"show\" — show me your hand!",
-    radicals: "Radical: 手/扌 (hand) — this IS the radical"
+    radicals: "Radical: 手/扌 (hand) — this IS the radical",
+    exampleSentence: "我用手拿筷子。",
+    exampleBreakdown: "I (我 wǒ) use (用 yòng) hand (手 shǒu) hold (拿 ná) chopsticks (筷子 kuàizi)"
   },
   {
     id: "mu4b", char: "目", pinyin: "mù", meaning: "eye",
@@ -137,7 +167,9 @@ const DEFAULT_DECK = [
     mnemonic: "An eye turned sideways! The ancient form was a clear eye shape 👁, which got squared off. The lines inside are the iris and pupil.",
     visual: "👁️ [=] 👁️",
     soundBridge: "\"mù\" — \"moo,\" the cow looks at you with big eyes",
-    radicals: "Radical: 目 (eye) — this IS the radical"
+    radicals: "Radical: 目 (eye) — this IS the radical",
+    exampleSentence: "我目不转睛地看。",
+    exampleBreakdown: "I (我 wǒ) eye (目 mù) not (不 bù) turn (转 zhuǎn) stare (睛 jīng)"
   },
   {
     id: "nv3", char: "女", pinyin: "nǚ", meaning: "woman",
@@ -145,7 +177,9 @@ const DEFAULT_DECK = [
     mnemonic: "A graceful figure kneeling with arms crossed — the ancient Chinese depiction of a woman in a dignified pose.",
     visual: "💃 く ノ",
     soundBridge: "\"nǚ\" sounds like \"new\" — a new woman in your life",
-    radicals: "Radical: 女 (woman) — this IS the radical"
+    radicals: "Radical: 女 (woman) — this IS the radical",
+    exampleSentence: "那个女人是导游。",
+    exampleBreakdown: "that (那个 nàgè) woman (女人 nǚrén) is (是 shì) tour guide (导游 dǎoyóu)"
   },
   {
     id: "zi3", char: "子", pinyin: "zǐ", meaning: "child / son",
@@ -153,7 +187,9 @@ const DEFAULT_DECK = [
     mnemonic: "A baby in a swaddling blanket with arms reaching out! The top is the head, the horizontal line is outstretched arms, and the curve is the wrapped body.",
     visual: "👶 了 +arms",
     soundBridge: "\"zǐ\" sounds like \"zuh\" — a child going \"zzzz\" while sleeping",
-    radicals: "Radical: 子 (child)"
+    radicals: "Radical: 子 (child)",
+    exampleSentence: "她带着孩子。",
+    exampleBreakdown: "she (她 tā) brings (带着 dàizhe) child (孩子 háizi)"
   },
   {
     id: "xin1", char: "心", pinyin: "xīn", meaning: "heart / mind",
@@ -161,7 +197,9 @@ const DEFAULT_DECK = [
     mnemonic: "The curved bottom is the heart shape, and the three dots above are the heartbeat — lub-dub-lub! In Chinese culture, heart and mind are one.",
     visual: "💗 . . . ♡",
     soundBridge: "\"xīn\" sounds like \"shin\" — your heart is in it, you feel it in your shins from running",
-    radicals: "Radical: 心/忄 (heart) — this IS the radical"
+    radicals: "Radical: 心/忄 (heart) — this IS the radical",
+    exampleSentence: "我很开心。",
+    exampleBreakdown: "I (我 wǒ) very (很 hěn) happy (开心 kāixīn)"
   },
 
   // --- Numbers ---
@@ -171,7 +209,9 @@ const DEFAULT_DECK = [
     mnemonic: "One single horizontal stroke — the simplest character. One line = one! It couldn't be more intuitive.",
     visual: "☝️ ———",
     soundBridge: "\"yī\" sounds like \"ee\" — easy as one!",
-    radicals: "Radical: 一 (one)"
+    radicals: "Radical: 一 (one)",
+    exampleSentence: "我买了一个苹果。",
+    exampleBreakdown: "I (我 wǒ) bought (买了 mǎile) one (一 yī) measure word (个 gè) apple (苹果 píngguǒ)"
   },
   {
     id: "er4", char: "二", pinyin: "èr", meaning: "two",
@@ -179,7 +219,9 @@ const DEFAULT_DECK = [
     mnemonic: "Two horizontal strokes stacked. Two lines = two! The top line is shorter (like a child) and the bottom is longer (like a parent).",
     visual: "✌️ ——\n———",
     soundBridge: "\"èr\" sounds like \"are\" — there ARE two of them",
-    radicals: "Radical: 二 (two)"
+    radicals: "Radical: 二 (two)",
+    exampleSentence: "还要二杯茶。",
+    exampleBreakdown: "also want (还要 háiyào) two (二 èr) cups (杯 bēi) tea (茶 chá)"
   },
   {
     id: "san1", char: "三", pinyin: "sān", meaning: "three",
@@ -187,7 +229,9 @@ const DEFAULT_DECK = [
     mnemonic: "Three horizontal strokes — the pattern continues! Like a hamburger: top bun, patty, bottom bun. Three layers = three!",
     visual: "🥉 ——\n———\n——",
     soundBridge: "\"sān\" sounds like \"sahn\" — the sun rises three times",
-    radicals: "Radical: 一 (one), repeated three times"
+    radicals: "Radical: 一 (one), repeated three times",
+    exampleSentence: "一共三十块钱。",
+    exampleBreakdown: "total (一共 yígòng) three (三 sān) ten (十 shí) dollars (块钱 kuàiqián)"
   },
   {
     id: "si4", char: "四", pinyin: "sì", meaning: "four",
@@ -195,7 +239,9 @@ const DEFAULT_DECK = [
     mnemonic: "The box contains what looks like legs of a table — four legs! The ancient form showed four lines, but now it's stylized inside a frame.",
     visual: "4️⃣ [儿]",
     soundBridge: "\"sì\" sounds like \"suh\" — there are four S's in \"Mississippi\"",
-    radicals: "Radical: 囗 (enclosure)"
+    radicals: "Radical: 囗 (enclosure)",
+    exampleSentence: "我走了四条街。",
+    exampleBreakdown: "I (我 wǒ) walked (走了 zǒule) four (四 sì) measure word (条 tiáo) streets (街 jiē)"
   },
   {
     id: "wu3", char: "五", pinyin: "wǔ", meaning: "five",
@@ -203,7 +249,9 @@ const DEFAULT_DECK = [
     mnemonic: "Like the Roman numeral V rotated — the crossing strokes between two horizontal lines represent five. Think of a hand giving a high-five!",
     visual: "🖐️ ═╤═",
     soundBridge: "\"wǔ\" sounds like \"woo\" — high five, woo!",
-    radicals: "Radical: 二 (two) with strokes between"
+    radicals: "Radical: 二 (two) with strokes between",
+    exampleSentence: "今天走了五公里。",
+    exampleBreakdown: "today (今天 jīntiān) walked (走了 zǒule) five (五 wǔ) kilometers (公里 gōnglǐ)"
   },
 
   // --- Common ---
@@ -213,7 +261,9 @@ const DEFAULT_DECK = [
     mnemonic: "Woman (女) + child (子) = good! A mother with her child — the most universally good thing. Family harmony = goodness.",
     visual: "👩‍👦 女+子 = 好",
     soundBridge: "\"hǎo\" sounds like \"how\" — \"How are you?\" \"Good!\"",
-    radicals: "女 (woman) + 子 (child)"
+    radicals: "女 (woman) + 子 (child)",
+    exampleSentence: "你好！",
+    exampleBreakdown: "you (你 nǐ) good (好 hǎo)"
   },
   {
     id: "zhong1", char: "中", pinyin: "zhōng", meaning: "middle / China",
@@ -221,7 +271,9 @@ const DEFAULT_DECK = [
     mnemonic: "An arrow hitting the exact center of a target! The vertical line pierces through the middle of the box. China sees itself as the Middle Kingdom (中国).",
     visual: "🎯 [|]",
     soundBridge: "\"zhōng\" sounds like \"jung\" — right in the middle of the jungle",
-    radicals: "Radical: 丨 (line) through 口 (mouth/enclosure)"
+    radicals: "Radical: 丨 (line) through 口 (mouth/enclosure)",
+    exampleSentence: "我来中国了。",
+    exampleBreakdown: "I (我 wǒ) come to (来 lái) middle (中 zhōng) country (国 guó)"
   },
   {
     id: "tian1", char: "天", pinyin: "tiān", meaning: "sky / day / heaven",
@@ -229,7 +281,9 @@ const DEFAULT_DECK = [
     mnemonic: "A person (大) with a line above their head — that's the sky above! What's over the biggest person? The heavens!",
     visual: "🌤️ 一 over 大",
     soundBridge: "\"tiān\" sounds like \"tee-en\" — teens look up at the sky and dream",
-    radicals: "一 (one/sky) + 大 (big/person)"
+    radicals: "一 (one/sky) + 大 (big/person)",
+    exampleSentence: "今天天气很好。",
+    exampleBreakdown: "today (今天 jīntiān) weather (天气 tiānqì) very (很 hěn) good (好 hǎo)"
   },
   {
     id: "wang2", char: "王", pinyin: "wáng", meaning: "king / ruler",
@@ -237,7 +291,9 @@ const DEFAULT_DECK = [
     mnemonic: "Three horizontal lines connected by a vertical line — heaven (top), earth (bottom), and humankind (middle), all united by the king!",
     visual: "👑 三 + |",
     soundBridge: "\"wáng\" sounds like \"wong\" — the king has a magic wand",
-    radicals: "Radical: 王/玉 (king/jade)"
+    radicals: "Radical: 王/玉 (king/jade)",
+    exampleSentence: "他姓王。",
+    exampleBreakdown: "he (他 tā) surname (姓 xìng) king (王 wáng)"
   },
   {
     id: "ma3", char: "马", pinyin: "mǎ", meaning: "horse",
@@ -245,7 +301,9 @@ const DEFAULT_DECK = [
     mnemonic: "The simplified form still hints at a horse seen from the side — the top is the mane, the strokes are the body, and the bottom dots are galloping hooves!",
     visual: "🐴 フ |. .",
     soundBridge: "\"mǎ\" sounds like \"ma\" — calling for mama on horseback!",
-    radicals: "Radical: 马 (horse) — simplified from 馬"
+    radicals: "Radical: 马 (horse) — simplified from 馬",
+    exampleSentence: "我们骑马回去。",
+    exampleBreakdown: "we (我们 wǒmen) ride (骑 qí) horse (马 mǎ) go back (回去 huíqù)"
   },
   {
     id: "men2", char: "门", pinyin: "mén", meaning: "door / gate",
@@ -253,7 +311,9 @@ const DEFAULT_DECK = [
     mnemonic: "A pair of saloon doors! The simplified character shows the frame of a doorway — two sides and a top. Walk right through!",
     visual: "🚪 | ‖",
     soundBridge: "\"mén\" sounds like \"men\" — men walk through the door",
-    radicals: "Radical: 门 (door) — simplified from 門"
+    radicals: "Radical: 门 (door) — simplified from 門",
+    exampleSentence: "我走进大门。",
+    exampleBreakdown: "I (我 wǒ) walk into (走进 zǒujìn) big (大 dà) door (门 mén)"
   },
   {
     id: "li4", char: "力", pinyin: "lì", meaning: "power / strength",
@@ -261,7 +321,9 @@ const DEFAULT_DECK = [
     mnemonic: "A flexed arm showing off a bicep! The curved stroke is the bent arm, straining with power and might.",
     visual: "💪 フ",
     soundBridge: "\"lì\" sounds like \"lee\" — Bruce Lee, the master of power!",
-    radicals: "Radical: 力 (power) — this IS the radical"
+    radicals: "Radical: 力 (power) — this IS the radical",
+    exampleSentence: "爬山需要力气。",
+    exampleBreakdown: "climbing (爬山 páshān) needs (需要 xūyào) strength (力气 lìqì)"
   }
 ];
 
@@ -536,7 +598,7 @@ const App = {
       btn.addEventListener("click", () => this.rateCard(parseInt(btn.dataset.rating)));
     });
 
-    // Audio
+    // Audio (back of card only)
     document.getElementById("btn-audio").addEventListener("click", (e) => {
       e.stopPropagation();
       const card = this.studyQueue[this.currentCardIndex];
@@ -717,6 +779,8 @@ const App = {
     document.getElementById("card-visual").textContent = card.visual || "";
     document.getElementById("card-sound-bridge").textContent = card.soundBridge || "";
     document.getElementById("card-radicals").textContent = card.radicals || "";
+    document.getElementById("card-example-sentence").textContent = card.exampleSentence || "";
+    document.getElementById("card-example-breakdown").textContent = card.exampleBreakdown || "";
 
     // Progress
     document.getElementById("card-progress-text").textContent =
