@@ -460,6 +460,12 @@ const SM2 = {
 };
 
 // ==========================================
+// Server Config
+// ==========================================
+
+const SERVER_URL = "http://localhost:8787";
+
+// ==========================================
 // App State & Storage
 // ==========================================
 
@@ -483,15 +489,23 @@ const App = {
   isFlipped: false,
   selectedCardId: null,
   writingCard: null,
+  serverAvailable: false,
+  variantData: {},       // { char: [1,2,3,4] } — available variants per character
+  audioSelections: {},   // { char: { variant: N } or { allBad: true } }
+  lastPlayedVariant: 0,  // last variant number played in picker
+  _currentVariantAudio: null, // currently playing variant Audio object
 
   // --- Initialization ---
 
-  init() {
+  async init() {
     this.loadData();
     this.bindEvents();
     this.updateTheme();
     this.refreshStudyView();
     this.updateDashboard();
+
+    // Non-blocking server detection
+    await this.detectServer();
   },
 
   loadData() {
@@ -549,14 +563,100 @@ const App = {
 
   saveSRS() {
     localStorage.setItem(STORAGE_KEYS.srs, JSON.stringify(this.srsData));
+    this.syncToServer();
   },
 
   saveSession() {
     localStorage.setItem(STORAGE_KEYS.session, JSON.stringify(this.session));
+    this.syncToServer();
   },
 
   saveStreak() {
     localStorage.setItem(STORAGE_KEYS.streak, JSON.stringify(this.streak));
+    this.syncToServer();
+  },
+
+  // --- Server Sync ---
+
+  async detectServer() {
+    try {
+      const ctrl = new AbortController();
+      const timer = setTimeout(() => ctrl.abort(), 1500);
+      const resp = await fetch(`${SERVER_URL}/progress`, { signal: ctrl.signal });
+      clearTimeout(timer);
+      if (resp.ok) {
+        this.serverAvailable = true;
+        document.getElementById("server-indicator").style.display = "";
+        // Load progress from server (overrides localStorage)
+        const data = await resp.json();
+        if (data && data.srsData) {
+          this.srsData = data.srsData;
+          this.session = data.session || this.session;
+          this.streak = data.streak || this.streak;
+          // Re-ensure every card has SRS data
+          this.deck.forEach(card => {
+            if (!this.srsData[card.id]) this.srsData[card.id] = SM2.defaultState();
+          });
+          this.refreshStudyView();
+          this.updateDashboard();
+        }
+        // Load audio selections
+        await this.loadAudioSelections();
+        // Load variant info
+        await this.loadVariantData();
+      }
+    } catch {
+      // Server not available — localStorage-only mode
+      this.serverAvailable = false;
+    }
+  },
+
+  async syncToServer() {
+    if (!this.serverAvailable) return;
+    try {
+      await fetch(`${SERVER_URL}/progress`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          srsData: this.srsData,
+          session: this.session,
+          streak: this.streak,
+        }),
+      });
+    } catch {
+      // Silently fail — localStorage still has the data
+    }
+  },
+
+  async loadAudioSelections() {
+    if (!this.serverAvailable) return;
+    try {
+      const resp = await fetch(`${SERVER_URL}/audio-selections`);
+      if (resp.ok) {
+        this.audioSelections = await resp.json();
+      }
+    } catch { /* ignore */ }
+  },
+
+  async saveAudioSelections() {
+    if (!this.serverAvailable) return;
+    try {
+      await fetch(`${SERVER_URL}/audio-selections`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(this.audioSelections),
+      });
+    } catch { /* ignore */ }
+  },
+
+  async loadVariantData() {
+    if (!this.serverAvailable) return;
+    try {
+      const resp = await fetch(`${SERVER_URL}/audio/variants`);
+      if (resp.ok) {
+        this.variantData = await resp.json();
+      }
+    } catch { /* ignore */ }
   },
 
   // --- Event Binding ---
@@ -603,6 +703,29 @@ const App = {
       e.stopPropagation();
       const card = this.studyQueue[this.currentCardIndex];
       if (card) this.speak(card.char);
+    });
+
+    // Audio picker — variant buttons
+    document.querySelectorAll(".btn-variant").forEach(btn => {
+      btn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        const card = this.studyQueue[this.currentCardIndex];
+        if (card) this.playVariant(card.char, parseInt(btn.dataset.variant));
+      });
+    });
+
+    // Audio picker — Keep button
+    document.getElementById("btn-audio-keep").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const card = this.studyQueue[this.currentCardIndex];
+      if (card && this.lastPlayedVariant > 0) this.promoteVariant(card.char, this.lastPlayedVariant);
+    });
+
+    // Audio picker — All Bad button
+    document.getElementById("btn-audio-bad").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const card = this.studyQueue[this.currentCardIndex];
+      if (card) this.markAllBad(card.char);
     });
 
     // Skip
@@ -796,6 +919,9 @@ const App = {
     document.getElementById("rate-hard-time").textContent = SM2.formatInterval(intervals[1]);
     document.getElementById("rate-good-time").textContent = SM2.formatInterval(intervals[2]);
     document.getElementById("rate-easy-time").textContent = SM2.formatInterval(intervals[3]);
+
+    // Audio picker — show variant buttons if variants exist
+    this.updateAudioPicker(card);
 
     // Reset flip state
     this.isFlipped = false;
@@ -1087,6 +1213,82 @@ const App = {
       speechSynthesis.speak(utterance);
     };
     audio.play();
+  },
+
+  // --- Audio Picker (variant curation) ---
+
+  /** Check if a card has variants and show/hide picker accordingly */
+  updateAudioPicker(card) {
+    const picker = document.getElementById("audio-picker");
+    const mainBtn = document.getElementById("btn-audio");
+    const variants = this.variantData[card.char];
+
+    if (this.serverAvailable && variants && variants.length > 0) {
+      // Show picker, hide single listen button
+      picker.classList.remove("hidden");
+      mainBtn.classList.add("hidden");
+      this.lastPlayedVariant = 0;
+      // Reset variant button states
+      document.querySelectorAll(".btn-variant").forEach(btn => {
+        btn.classList.remove("playing");
+        const v = parseInt(btn.dataset.variant);
+        btn.disabled = !variants.includes(v);
+        btn.style.opacity = variants.includes(v) ? "1" : "0.3";
+      });
+    } else {
+      // Normal single audio mode
+      picker.classList.add("hidden");
+      mainBtn.classList.remove("hidden");
+    }
+  },
+
+  playVariant(char, variant) {
+    // Stop any currently playing variant
+    if (this._currentVariantAudio) {
+      this._currentVariantAudio.pause();
+      this._currentVariantAudio = null;
+    }
+
+    const url = `${SERVER_URL}/audio/variants/${encodeURIComponent(char)}_v${variant}.mp3`;
+    const audio = new Audio(url);
+    this._currentVariantAudio = audio;
+    this.lastPlayedVariant = variant;
+
+    // Update button states
+    document.querySelectorAll(".btn-variant").forEach(btn => {
+      btn.classList.toggle("playing", parseInt(btn.dataset.variant) === variant);
+    });
+
+    audio.play().catch(() => this.toast("Failed to play variant"));
+  },
+
+  async promoteVariant(char, variant) {
+    if (!this.serverAvailable) return;
+    try {
+      const resp = await fetch(`${SERVER_URL}/audio/promote`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ char, variant }),
+      });
+      if (resp.ok) {
+        // Update local state — remove variants for this char
+        delete this.variantData[char];
+        this.audioSelections[char] = { variant, promoted: true };
+        await this.saveAudioSelections();
+        this.toast(`Kept variant ${variant} for ${char}`);
+        // Refresh picker UI for current card
+        const card = this.studyQueue[this.currentCardIndex];
+        if (card) this.updateAudioPicker(card);
+      }
+    } catch {
+      this.toast("Failed to promote variant");
+    }
+  },
+
+  async markAllBad(char) {
+    this.audioSelections[char] = { allBad: true };
+    await this.saveAudioSelections();
+    this.toast(`Marked all variants for ${char} as bad`);
   },
 
   // --- Writing Practice ---

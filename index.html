@@ -16,6 +16,7 @@
         <h1 class="logo">漢字 <span class="logo-sub">Study</span></h1>
       </div>
       <div class="top-bar-right">
+        <span id="server-indicator" class="server-dot" title="Server connected" style="display:none;"></span>
         <button id="btn-theme" class="icon-btn" title="Toggle theme">🌙</button>
         <button id="btn-search" class="icon-btn" title="Search cards">🔍</button>
       </div>
@@ -115,6 +116,18 @@
                   <div class="card-example-breakdown" id="card-example-breakdown"></div>
                 </div>
                 <button id="btn-audio" class="btn btn-sm btn-audio" title="Hear example sentence">🔊 Listen</button>
+                <div id="audio-picker" class="audio-picker hidden">
+                  <div class="audio-picker-variants">
+                    <button class="btn btn-sm btn-variant" data-variant="1">🔊1</button>
+                    <button class="btn btn-sm btn-variant" data-variant="2">🔊2</button>
+                    <button class="btn btn-sm btn-variant" data-variant="3">🔊3</button>
+                    <button class="btn btn-sm btn-variant" data-variant="4">🔊4</button>
+                  </div>
+                  <div class="audio-picker-actions">
+                    <button id="btn-audio-keep" class="btn btn-sm btn-audio-keep">✅ Keep</button>
+                    <button id="btn-audio-bad" class="btn btn-sm btn-audio-bad">❌ All Bad</button>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
