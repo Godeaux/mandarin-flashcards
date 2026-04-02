@@ -604,6 +604,10 @@ const App = {
         await this.loadAudioSelections();
         // Load variant info
         await this.loadVariantData();
+        // Re-trigger picker on currently displayed card
+        if (this.studyQueue.length > 0 && this.currentCardIndex < this.studyQueue.length) {
+          this.updateAudioPicker(this.studyQueue[this.currentCardIndex]);
+        }
       }
     } catch {
       // Server not available — localStorage-only mode
