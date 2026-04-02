@@ -114,7 +114,35 @@ class Handler(BaseHTTPRequestHandler):
             self._json_response(variants)
 
         else:
+            # Serve static files (HTML, JS, CSS, audio)
+            self._serve_static(path)
+
+    def _serve_static(self, path):
+        """Serve static files from the project directory."""
+        if path == "/":
+            path = "/index.html"
+        # Security: prevent directory traversal
+        base = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.normpath(os.path.join(base, path.lstrip("/")))
+        if not filepath.startswith(base) or not os.path.isfile(filepath):
             self._json_response({"error": "not found"}, 404)
+            return
+        # Content types
+        ext = os.path.splitext(filepath)[1].lower()
+        ctypes = {
+            ".html": "text/html", ".js": "application/javascript",
+            ".css": "text/css", ".mp3": "audio/mpeg", ".json": "application/json",
+            ".png": "image/png", ".jpg": "image/jpeg", ".ico": "image/x-icon",
+        }
+        ctype = ctypes.get(ext, "application/octet-stream")
+        self.send_response(200)
+        self.send_header("Content-Type", ctype)
+        self._cors()
+        size = os.path.getsize(filepath)
+        self.send_header("Content-Length", size)
+        self.end_headers()
+        with open(filepath, "rb") as f:
+            self.wfile.write(f.read())
 
     def do_POST(self):
         path = unquote(urlparse(self.path).path)
@@ -164,7 +192,11 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == "__main__":
-    server = HTTPServer(("127.0.0.1", PORT), Handler)
+    import socket
+    class ReusableHTTPServer(HTTPServer):
+        allow_reuse_address = True
+        address_family = socket.AF_INET
+    server = ReusableHTTPServer(("127.0.0.1", PORT), Handler)
     print(f"Flashcard server running on http://localhost:{PORT}")
     print(f"Data dir: {DATA_DIR}")
     print(f"Audio dir: {AUDIO_DIR}")
