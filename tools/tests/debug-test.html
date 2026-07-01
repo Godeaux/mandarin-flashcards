@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Debug Test</title>
+  <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+  <div id="app">
+    <h1 id="test-heading">TEST: If you see this, basic HTML works</h1>
+    <button id="test-button">Click me</button>
+  </div>
+  <div id="debug-output"></div>
+
+  <script type="module">
+    // Simple test to see if we can get this far
+    document.getElementById('test-heading').textContent = 'JavaScript is running!';
+    
+    document.getElementById('test-button').addEventListener('click', () => {
+      document.getElementById('debug-output').textContent = 'Button clicked at ' + new Date().toLocaleTimeString();
+    });
+    
+    // Now try to load our config
+    try {
+      import('./js/config.js').then(module => {
+        document.getElementById('debug-output').textContent += 
+          '\n✅ Config module loaded: ' + module.CONFIG.SERVER_URL;
+      }).catch(err => {
+        document.getElementById('debug-output').textContent += 
+          '\n❌ Config module failed: ' + err.message;
+      });
+    } catch (e) {
+      document.getElementById('debug-output').textContent += 
+        '\n❌ Import failed: ' + e.message;
+    }
+  </script>
+</body>
+</html>

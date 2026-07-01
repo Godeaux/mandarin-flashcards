@@ -1,0 +1,11 @@
+{
+  "name": "漢字 Study — Mandarin SRS",
+  "short_name": "漢字 Study",
+  "description": "Spaced-repetition Mandarin Chinese study tool",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#1a1a2e",
+  "theme_color": "#1a1a2e",
+  "orientation": "portrait",
+  "icons": []
+}

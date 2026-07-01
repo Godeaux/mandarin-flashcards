@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Event Listener Test</title>
+  <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+  <div id="test-output">
+    <h1>Event Listener Test</h1>
+    <div id="log"></div>
+  </div>
+
+  <script type="module">
+    const logDiv = document.getElementById('log');
+    function log(msg) {
+      logDiv.innerHTML += `<div>${new Date().toLocaleTimeString()}: ${msg}</div>`;
+      console.log(msg);
+    }
+    
+    // Wait for app to load
+    setTimeout(async () => {
+      try {
+        log('Waiting for app to load...');
+        await new Promise(r => setTimeout(r, 3000));
+        
+        log('Looking for theme button...');
+        const themeButton = document.getElementById('btn-theme');
+        
+        if (!themeButton) {
+          log('Theme button not found!');
+          return;
+        }
+        
+        log('Found theme button: "' + themeButton.textContent + '"');
+        
+        // Check if the button has any click listeners (we can't directly see them, but we can test)
+        log('Testing if button responds to click...');
+        
+        // Store original onclick
+        const originalOnclick = themeButton.onclick;
+        log('Existing onclick: ' + (originalOnclick ? 'Present' : 'None'));
+        
+        // Add our own listener to see if it fires
+        let ourClickCount = 0;
+        themeButton.addEventListener('click', () => {
+          ourClickCount++;
+          log('🎯 Our custom click listener fired! Count: ' + ourClickCount);
+          
+          // Also try to trigger the theme change manually
+          const currentTheme = document.documentElement.getAttribute('data-theme');
+          const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+          document.documentElement.setAttribute('data-color-scheme', newTheme);
+          document.documentElement.setAttribute('data-theme', newTheme);
+          log('🔧 Manually changed theme to: ' + newTheme);
+        });
+        
+        log('Added our click listener. Now testing manual click simulation...');
+        
+        // Test 1: Programmatic click
+        log('Test 1: Calling themeButton.click()');
+        themeButton.click();
+        
+        // Wait a bit
+        setTimeout(() => {
+          log('After programmatic click: our listener fired ' + ourClickCount + ' times');
+          
+          // Test 2: Dispatch a real click event
+          log('Test 2: Dispatching new MouseEvent(\'click\')');
+          const clickEvent = new MouseEvent('click', {
+            view: window,
+            bubbles: true,
+            cancelable: true
+          });
+          
+          const result = themeButton.dispatchEvent(clickEvent);
+          log('Dispatch event result: ' + result + ' (false means prevented default)');
+          
+          setTimeout(() => {
+            log('After dispatched click: our listener fired ' + ourClickCount + ' times');
+            
+            // Test 3: Try to see if we can prevent default and see what happens
+            log('Test 3: Trying to understand what might be blocking clicks...');
+            
+          }, 1000);
+          
+        }, 500);
+        
+      } catch (e) {
+        log('Test failed: ' + e.message);
+        console.error(e);
+      }
+    }, 3000);
+  </script>
+</body>
+</html>

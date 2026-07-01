@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Interaction Test</title>
+  <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+  <div id="test-results"></div>
+  <script type="module">
+    const results = document.getElementById('test-results');
+    results.innerHTML = '<h2>Testing App Interaction</h2>';
+    
+    // Wait a bit for the app to load
+    setTimeout(() => {
+      // Try to find and interact with actual app elements
+      const themeButton = document.getElementById('btn-theme');
+      const searchButton = document.getElementById('btn-search');
+      
+      if (themeButton) {
+        results.innerHTML += '<p>✅ Found theme button: "' + themeButton.textContent + '"</p>';
+        // Test if we can trigger a click
+        try {
+          themeButton.click();
+          results.innerHTML += '<p>✅ Theme button click() succeeded</p>';
+        } catch (e) {
+          results.innerHTML += '<p>❌ Theme button click() failed: ' + e.message + '</p>';
+        }
+      } else {
+        results.innerHTML += '<p>ℹ️ Theme button not found yet</p>';
+      }
+      
+      if (searchButton) {
+        results.innerHTML += '<p>✅ Found search button: "' + searchButton.textContent + '"</p>';
+      } else {
+        results.innerHTML += '<p>ℹ️ Search button not found yet</p>';
+      }
+      
+      // Try to see if any event listeners are attached
+      if (themeButton) {
+        // This won't show us the listeners directly, but we can at least see if the element exists
+        results.innerHTML += '<p>🔍 Theme button element: ' + themeButton.outerHTML.substring(0, 100) + '...</p>';
+      }
+    }, 1500); // Wait 1.5 seconds for app to load
+  </script>
+</body>
+</html>

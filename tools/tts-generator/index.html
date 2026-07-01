@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Qwen3-TTS Generator</title>
+  <style>
+    :root {
+      --bg: #1a1a2e;
+      --surface: #16213e;
+      --surface-2: #1f2937;
+      --text: #e8e6e3;
+      --text-muted: #9ca3af;
+      --accent: #f59e0b;
+      --accent-hover: #d97706;
+      --border: #374151;
+      --success: #10b981;
+      --error: #ef4444;
+      --radius: 12px;
+      --radius-sm: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      margin-bottom: 8px;
+      color: var(--accent);
+    }
+
+    .subtitle {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 24px;
+    }
+
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    textarea, input, select {
+      width: 100%;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 12px;
+      color: var(--text);
+      font-size: 1rem;
+      font-family: inherit;
+      resize: vertical;
+    }
+
+    textarea:focus, input:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    textarea {
+      min-height: 100px;
+    }
+
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: var(--bg);
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 12px 20px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-secondary {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--border);
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .status {
+      margin-top: 12px;
+      padding: 12px;
+      border-radius: var(--radius-sm);
+      font-size: 0.9rem;
+    }
+
+    .status.loading {
+      background: rgba(245, 158, 11, 0.1);
+      color: var(--accent);
+    }
+
+    .status.success {
+      background: rgba(16, 185, 129, 0.1);
+      color: var(--success);
+    }
+
+    .status.error {
+      background: rgba(239, 68, 68, 0.1);
+      color: var(--error);
+    }
+
+    .audio-list {
+      margin-top: 16px;
+    }
+
+    .audio-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: var(--surface-2);
+      border-radius: var(--radius-sm);
+      margin-bottom: 8px;
+    }
+
+    .audio-item audio {
+      flex: 1;
+      height: 40px;
+    }
+
+    .audio-item .filename {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      min-width: 150px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .audio-item .btn-remove {
+      background: var(--error);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    /* Progress bar styles */
+    .progress-container {
+      margin-top: 16px;
+      display: none;
+    }
+    .progress-wrapper {
+      width: 100%;
+      height: 8px;
+      background: var(--surface-2);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .progress-bar {
+      width: 0%;
+      height: 100%;
+      background: var(--accent);
+      transition: width 0.3s ease-out;
+      box-shadow: 0 0 8px var(--accent);
+    }
+    .progress-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      font-family: monospace;
+    }
+
+    .trimmer-container {
+      margin-top: 16px;
+      padding: 16px;
+      background: var(--surface-2);
+      border-radius: var(--radius-sm);
+      display: none;
+    }
+
+    .trimmer-container.active {
+      display: block;
+    }
+
+    #waveform {
+      width: 100%;
+      height: 128px;
+      border-radius: var(--radius-sm);
+      background: var(--bg);
+      cursor: crosshair;
+    }
+
+    .trim-controls {
+      display: flex;
+      gap: 16px;
+      margin-top: 12px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .trim-info {
+      flex: 1;
+      display: flex;
+      gap: 16px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .trim-info span {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .trim-info .value {
+      color: var(--text);
+      font-weight: 600;
+      font-family: monospace;
+    }
+
+    .trim-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .btn-trim {
+      background: var(--success);
+      color: white;
+      border: none;
+      border-radius: var(--radius-sm);
+      padding: 8px 16px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .btn-trim:hover {
+      background: #0d9668;
+    }
+
+    .btn-trim:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .btn-reset {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-reset:hover {
+      background: var(--border);
+    }
+
+    .trim-preview-audio {
+      margin-top: 12px;
+    }
+
+    .trim-preview-audio audio {
+      width: 100%;
+      height: 40px;
+    }
+
+    .hint {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+    }
+
+    @media (max-width: 600px) {
+      .row {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🎙️ Qwen3-TTS Generator</h1>
+    <p class="subtitle">Generate Mandarin audio files locally. Enter text, generate, play back, and save.</p>
+
+    <div class="card">
+      <label for="textInput">Text to Generate</label>
+      <textarea id="textInput" placeholder="Enter Chinese text here... e.g., 你好，今天天气很好。"></textarea>
+      <p class="hint">Supports Chinese characters, pinyin, and mixed text. The model will pronounce naturally.</p>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <label for="filename">Filename (without extension)</label>
+          <input type="text" id="filename" placeholder="e.g., greeting_01">
+        </div>
+        <div>
+          <label for="voiceStyle">Voice Style (optional)</label>
+          <input type="text" id="voiceStyle" placeholder="e.g., a warm female voice speaking slowly">
+          <p class="hint">Describe the voice you want: gender, tone, speed, emotion</p>
+        </div>
+      </div>
+      
+      <div class="btn-group">
+        <button class="btn" id="generateBtn">🎵 Generate Audio</button>
+        <button class="btn btn-secondary" id="saveBtn" disabled>💾 Save to File</button>
+      </div>
+
+      <div id="progressContainer" class="progress-container">
+        <div class="progress-wrapper">
+          <div id="progressBar" class="progress-bar"></div>
+        </div>
+        <div class="progress-stats">
+          <span id="progressTimer">Seconds: 0</span>
+          <span id="progressEstimate">Estimating...</span>
+        </div>
+      </div>
+
+      <div id="status" class="status" style="display: none;"></div>
+    </div>
+
+    <!-- Audio Trimmer Section -->
+    <div id="trimmerContainer" class="trimmer-container">
+      <label>🎚️ Audio Trimmer</label>
+      <p class="hint">Drag the handles to trim the audio. The highlighted section will be kept.</p>
+      
+      <div id="waveform"></div>
+      
+      <div class="trim-controls">
+        <div class="trim-info">
+          <span>Start: <span id="trimStart" class="value">0.00s</span></span>
+          <span>End: <span id="trimEnd" class="value">0.00s</span></span>
+          <span>Duration: <span id="trimDuration" class="value">0.00s</span></span>
+        </div>
+        <div class="trim-actions">
+          <button class="btn-trim btn-reset" id="resetBtn">↺ Reset</button>
+          <button class="btn-trim" id="trimBtn">✂️ Apply Trim</button>
+        </div>
+      </div>
+      
+      <div id="trimPreview" class="trim-preview-audio" style="display: none;">
+        <label>Trimmed Preview:</label>
+        <audio id="trimPreviewAudio" controls></audio>
+      </div>
+    </div>
+
+    <div class="card">
+      <label>Generated Audio</label>
+      <div id="audioList" class="audio-list">
+        <p class="hint">No audio generated yet. Enter text and click "Generate Audio".</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wavesurfer.js for waveform visualization -->
+  <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
+  <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.min.js"></script>
+
+  <script>
+    const textInput = document.getElementById('textInput');
+    const filenameInput = document.getElementById('filename');
+    const voiceStyle = document.getElementById('voiceStyle');
+    const generateBtn = document.getElementById('generateBtn');
+    const saveBtn = document.getElementById('saveBtn');
+    const trimBtn = document.getElementById('trimBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const statusEl = document.getElementById('status');
+    const audioList = document.getElementById('audioList');
+    const progressContainer = document.getElementById('progressContainer');
+    const progressBar = document.getElementById('progressBar');
+    const progressTimer = document.getElementById('progressTimer');
+    const progressEstimate = document.getElementById('progressEstimate');
+    const waveformContainer = document.getElementById('waveformContainer');
+    const waveformEl = document.getElementById('waveform');
+    const trimPreviewEl = document.getElementById('trimPreview');
+    const trimStartEl = document.getElementById('trimStart');
+    const trimEndEl = document.getElementById('trimEnd');
+    const trimDurationEl = document.getElementById('trimDuration');
+
+    let currentAudio = null;
+    let currentBlob = null;
+    let currentFilename = null;
+    let currentAudioUrl = null;
+    let wavesurfer = null;
+    let wsRegions = null;
+    let originalAudioPath = null;
+
+    function showStatus(message, type) {
+      statusEl.textContent = message;
+      statusEl.className = 'status ' + type;
+      statusEl.style.display = 'block';
+    }
+
+    function hideStatus() {
+      statusEl.style.display = 'none';
+    }
+
+    generateBtn.addEventListener('click', async () => {
+      const text = textInput.value.trim();
+      if (!text) {
+        showStatus('Please enter some text to generate.', 'error');
+        return;
+      }
+
+      // --- Progress Bar Setup ---
+      const estimatedDuration = Math.max(15, (text.length / 10) * 1.5);
+      let elapsed = 0;
+      let timerInterval = null;
+      let progressInterval = null;
+
+      const startProgress = () => {
+        progressContainer.style.display = 'block';
+        progressBar.style.width = '0%';
+        progressTimer.textContent = 'Seconds: 0';
+        progressEstimate.textContent = `Est: ~${estimatedDuration.toFixed(1)}s`;
+        
+        timerInterval = setInterval(() => {
+          elapsed++;
+          progressTimer.textContent = `Seconds: ${elapsed}`;
+        }, 1000);
+
+        progressInterval = setInterval(() => {
+          const percent = (elapsed / estimatedDuration) * 100;
+          progressBar.style.width = Math.min(percent, 98) + '%';
+        }, 500);
+      };
+
+      const stopProgress = () => {
+        clearInterval(timerInterval);
+        clearInterval(progressInterval);
+        progressContainer.style.display = 'none';
+        progressBar.style.width = '0%';
+      };
+
+      startProgress();
+      // -------------------------
+
+      generateBtn.disabled = true;
+      showStatus('Generating audio... This may take 10-30 seconds.', 'loading');
+
+      try {
+        const voiceDesc = voiceStyle.value.trim();
+        const response = await fetch('/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: text,
+            voice: voiceDesc || 'default'
+          })
+        });
+
+        if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error || 'Generation failed');
+        }
+
+        const blob = await response.blob();
+        currentBlob = blob;
+        
+        // Auto-generate filename if not provided
+        let name = filenameInput.value.trim();
+        if (!name) {
+          name = 'audio_' + Date.now();
+        }
+        currentFilename = name + '.mp3';
+
+        // Create audio element
+        currentAudioUrl = URL.createObjectURL(blob);
+        currentAudio = new Audio(currentAudioUrl);
+
+        // Display in list
+        audioList.innerHTML = '';
+        const item = document.createElement('div');
+        item.className = 'audio-item';
+        item.innerHTML = `
+          <span class="filename">${currentFilename}</span>
+          <audio controls src="${currentAudioUrl}"></audio>
+          <button class="btn-remove" onclick="removeAudio('${currentFilename}')">✕</button>
+        `;
+        audioList.appendChild(item);
+
+        showStatus(`Generated: ${currentFilename}`, 'success');
+        saveBtn.disabled = false;
+        trimBtn.disabled = false;
+        
+        // Get the latest audio path from server for trimming
+        try {
+          const pathResp = await fetch('/get-latest-audio');
+          if (pathResp.ok) {
+            const pathData = await pathResp.json();
+            originalAudioPath = pathData.audio_path;
+          }
+        } catch (e) {
+          console.warn('Could not get latest audio path:', e);
+        }
+        
+        // Initialize waveform for trimming
+        initWaveform(currentAudioUrl);
+
+      } catch (err) {
+        showStatus('Error: ' + err.message, 'error');
+      } finally {
+        stopProgress();
+        generateBtn.disabled = false;
+      }
+    });
+
+    saveBtn.addEventListener('click', () => {
+      if (!currentBlob || !currentFilename) return;
+
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(currentBlob);
+      a.download = currentFilename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      
+      showStatus(`Saved: ${currentFilename}`, 'success');
+    });
+
+    window.removeAudio = function(filename) {
+      audioList.innerHTML = '<p class="hint">No audio generated yet. Enter text and click "Generate Audio".</p>';
+      currentAudio = null;
+      currentBlob = null;
+      currentFilename = null;
+      currentAudioUrl = null;
+      originalAudioPath = null;
+      saveBtn.disabled = true;
+      trimBtn.disabled = true;
+      document.getElementById('trimmerContainer').classList.remove('active');
+      if (wavesurfer) {
+        wavesurfer.destroy();
+        wavesurfer = null;
+        wsRegions = null;
+      }
+      hideStatus();
+    };
+
+    // Format time as MM:SS.ms
+    function formatTime(seconds) {
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.floor(seconds % 60);
+      const ms = Math.floor((seconds % 1) * 100);
+      return `${mins}:${secs.toString().padStart(2, '0')}.${ms.toString().padStart(2, '0')}`;
+    }
+
+    // Initialize waveform and trimmer
+    function initWaveform(audioUrl) {
+      if (wavesurfer) {
+        wavesurfer.destroy();
+      }
+
+      wavesurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: '#374151',
+        progressColor: '#f59e0b',
+        cursorColor: '#f59e0b',
+        barWidth: 2,
+        barGap: 1,
+        barRadius: 2,
+        height: 128,
+        responsive: true,
+        normalize: true,
+      });
+
+      wsRegions = wavesurfer.registerPlugin(WaveSurfer.Regions.create());
+
+      wavesurfer.load(audioUrl);
+
+      wavesurfer.on('ready', () => {
+        const duration = wavesurfer.getDuration();
+        
+        // Create initial region (keep middle 80% by default)
+        const start = duration * 0.1;
+        const end = duration * 0.9;
+        
+        wsRegions.addRegion({
+          start: start,
+          end: end,
+          color: 'rgba(245, 158, 11, 0.3)',
+          drag: true,
+          resize: true,
+        });
+
+        updateTrimInfo();
+        document.getElementById('trimmerContainer').classList.add('active');
+        trimBtn.disabled = false;
+      });
+
+      wsRegions.on('region-updated', (region) => {
+        updateTrimInfo(region);
+      });
+
+      wsRegions.on('region-clicked', (region, e) => {
+        e.stopPropagation();
+        region.play();
+      });
+    }
+
+    function updateTrimInfo(region) {
+      if (!region) {
+        const regions = wsRegions.getRegions();
+        region = regions[0];
+      }
+      
+      if (region) {
+        const start = region.start;
+        const end = region.end;
+        const duration = end - start;
+        
+        trimStartEl.textContent = formatTime(start);
+        trimEndEl.textContent = formatTime(end);
+        trimDurationEl.textContent = formatTime(duration);
+      }
+    }
+
+    // Trim button handler
+    trimBtn.addEventListener('click', async () => {
+      const regions = wsRegions.getRegions();
+      if (!regions || regions.length === 0) {
+        showStatus('No trim region selected.', 'error');
+        return;
+      }
+
+      const region = regions[0];
+      const startMs = Math.round(region.start * 1000);
+      const endMs = Math.round(region.end * 1000);
+
+      if (!originalAudioPath) {
+        showStatus('No original audio to trim.', 'error');
+        return;
+      }
+
+      trimBtn.disabled = true;
+      showStatus('Trimming audio...', 'loading');
+
+      try {
+        const response = await fetch('/trim', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            audio_path: originalAudioPath,
+            start_ms: startMs,
+            end_ms: endMs
+          })
+        });
+
+        if (!response.ok) {
+          const error = await response.text();
+          throw new Error(error || 'Trim failed');
+        }
+
+        const blob = await response.blob();
+        const url = URL.createObjectURL(blob);
+        
+        // Show preview
+        const previewAudio = document.getElementById('trimPreviewAudio');
+        previewAudio.src = url;
+        document.getElementById('trimPreview').style.display = 'block';
+        
+        // Update current blob to trimmed version
+        currentBlob = blob;
+        currentAudioUrl = url;
+        
+        // Update the audio player in the list
+        const audioPlayer = audioList.querySelector('audio');
+        if (audioPlayer) {
+          audioPlayer.src = url;
+        }
+        
+        showStatus('Trim applied! Preview the result above, then save.', 'success');
+        
+      } catch (err) {
+        showStatus('Error: ' + err.message, 'error');
+      } finally {
+        trimBtn.disabled = false;
+      }
+    });
+
+    // Reset button handler
+    resetBtn.addEventListener('click', () => {
+      if (wavesurfer && wsRegions) {
+        wsRegions.clearRegions();
+        const duration = wavesurfer.getDuration();
+        const start = duration * 0.1;
+        const end = duration * 0.9;
+        wsRegions.addRegion({
+          start: start,
+          end: end,
+          color: 'rgba(245, 158, 11, 0.3)',
+          drag: true,
+          resize: true,
+        });
+        updateTrimInfo();
+        document.getElementById('trimPreview').style.display = 'none';
+        showStatus('Trim reset to default.', 'success');
+      }
+    });
+
+    // Auto-fill filename from text if empty
+    textInput.addEventListener('input', () => {
+      if (!filenameInput.value && textInput.value) {
+        const clean = textInput.value
+          .replace(/[^\w\u4e00-\u9fff]/g, '_')
+          .substring(0, 20)
+          .toLowerCase();
+        filenameInput.value = clean;
+      }
+    });
+  </script>
+</body>
+</html>

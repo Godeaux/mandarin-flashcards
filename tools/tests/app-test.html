@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>App Test</title>
+  <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+  <div id="output"></div>
+  <script type="module">
+    try {
+      const results = await Promise.all([
+        import('./js/config.js'),
+        import('./js/storage.js'),
+        import('./js/deck.js'),
+        import('./js/srs.js'),
+        import('./js/audio.js'),
+        import('./js/ui.js'),
+        import('./js/main.js')
+      ]);
+      document.getElementById('output').innerHTML = '<h2>✅ All modules loaded successfully</h2>';
+      
+      // Try to access the app
+      const mainMod = results[6];
+      const App = mainMod.default || mainMod;
+      if (App && typeof App.init === 'function') {
+        document.getElementById('output').innerHTML += '<p>✅ App.init function found</p>';
+        try {
+          await App.init();
+          document.getElementById('output').innerHTML += '<p>✅ App initialized successfully</p>';
+        } catch (e) {
+          document.getElementById('output').innerHTML += `<p>❌ App.init failed: ${e.message}</p>`;
+          console.error(e);
+        }
+      } else {
+        document.getElementById('output').innerHTML += '<p>❌ App.init not found</p>';
+      }
+    } catch (e) {
+      document.getElementById('output').innerHTML = `<h2>❌ Module loading failed: ${e.message}</h2>`;
+      console.error(e);
+    }
+  </script>
+</body>
+</html>

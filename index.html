@@ -2,9 +2,13 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="mobile-web-app-capable" content="yes">
+  <link rel="manifest" href="manifest.json">
   <title>漢字 Study — Mandarin SRS</title>
-  <link rel="stylesheet" href="style.css?v=2">
+  <link rel="stylesheet" href="style.css?v=14">
   <meta name="description" content="A spaced-repetition Mandarin Chinese study tool with visual mnemonics">
   <meta name="theme-color" content="#1a1a2e">
 </head>
@@ -44,38 +48,23 @@
     <!-- Study View -->
     <section id="view-study" class="view active">
       <div id="study-dashboard">
-        <div class="stat-row">
-          <div class="stat-box">
-            <div class="stat-num" id="stat-due">0</div>
-            <div class="stat-label">Due</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num" id="stat-new">0</div>
-            <div class="stat-label">New</div>
-          </div>
-          <div class="stat-box">
-            <div class="stat-num" id="stat-learned">0</div>
-            <div class="stat-label">Learned</div>
-          </div>
-          <div class="stat-box streak">
-            <div class="stat-num" id="stat-streak">0</div>
-            <div class="stat-label">🔥 Streak</div>
-          </div>
+        <div class="stat-row-compact">
+          <span class="stat-item"><strong id="stat-due">0</strong> Due</span>
+          <span class="stat-item"><strong id="stat-new">0</strong> New</span>
+          <span class="stat-item"><strong id="stat-learned">0</strong> Learned</span>
+          <span class="stat-item"><strong id="stat-streak">0</strong> 🔥</span>
+          <span class="stat-item"><strong id="stat-today-count">0</strong> Today</span>
+          <span class="stat-item">Acc: <strong id="stat-today-acc">—</strong></span>
         </div>
-        <div class="session-stats">
-          <span>Today: <strong id="stat-today-count">0</strong> reviewed</span>
-          <span>Accuracy: <strong id="stat-today-acc">—</strong></span>
+        <button id="btn-toggle-cat" class="cat-toggle-btn">Filter ▾</button>
+        <div id="category-filters" class="cat-collapsed">
+          <button class="cat-btn active" data-cat="all">All</button>
+          <button class="cat-btn" data-cat="nature">🌿 Nature</button>
+          <button class="cat-btn" data-cat="people">👤 People</button>
+          <button class="cat-btn" data-cat="numbers">🔢 Numbers</button>
+          <button class="cat-btn" data-cat="common">⭐ Common</button>
+          <button class="cat-btn" data-cat="custom">📝 Custom</button>
         </div>
-      </div>
-
-      <!-- Category Filters -->
-      <div id="category-filters">
-        <button class="cat-btn active" data-cat="all">All</button>
-        <button class="cat-btn" data-cat="nature">🌿 Nature</button>
-        <button class="cat-btn" data-cat="people">👤 People</button>
-        <button class="cat-btn" data-cat="numbers">🔢 Numbers</button>
-        <button class="cat-btn" data-cat="common">⭐ Common</button>
-        <button class="cat-btn" data-cat="custom">📝 Custom</button>
       </div>
 
       <!-- Empty State -->
@@ -86,72 +75,48 @@
         <button id="btn-learn-new" class="btn btn-primary">Learn New Cards</button>
       </div>
 
-      <!-- Flashcard -->
+      <!-- Flashcard (Swipe Interface) -->
       <div id="flashcard-container" class="hidden">
         <div class="card-progress">
           <span id="card-progress-text">1 / 10</span>
           <button id="btn-skip" class="btn btn-sm" title="Skip this card">Skip →</button>
         </div>
-        <div id="flashcard" class="flashcard">
-          <div class="card-inner">
-            <div class="card-front">
-              <div class="card-category-tag" id="card-cat-tag"></div>
-              <div class="card-character" id="card-char"></div>
-              <div class="card-pinyin" id="card-pinyin"></div>
-              <div class="card-hint">Tap to reveal</div>
-            </div>
-            <div class="card-back">
-              <div class="card-character card-char-sm" id="card-char-back"></div>
+
+        <!-- Swipe glow overlays -->
+        <div id="swipe-glow-left" class="swipe-glow glow-again"></div>
+        <div id="swipe-glow-right" class="swipe-glow glow-easy"></div>
+        <div id="swipe-glow-up" class="swipe-glow glow-good"></div>
+        <div id="swipe-glow-down" class="swipe-glow glow-hard"></div>
+
+        <!-- Rating labels on edges -->
+        <div class="swipe-label swipe-label-left" id="label-again">← Again</div>
+        <div class="swipe-label swipe-label-right" id="label-easy">Easy →</div>
+        <div class="swipe-label swipe-label-up" id="label-good">↑ Good</div>
+        <div class="swipe-label swipe-label-down" id="label-hard">Hard ↓</div>
+
+        <!-- The card -->
+        <div id="flashcard" class="flashcard swipeable">
+          <div class="card-face card-front">
+            <div class="card-character" id="card-char"></div>
+            <div class="card-swipe-hint" id="swipe-hint">swipe to rate · tap to reveal</div>
+          </div>
+          <div class="card-face card-back hidden">
+            <div class="card-back-top">
+              <div class="card-back-char" id="card-char-back"></div>
               <div class="card-pinyin" id="card-pinyin-back"></div>
               <div class="card-meaning" id="card-meaning"></div>
-              <div class="card-divider"></div>
-              <div class="card-mnemonic" id="card-mnemonic"></div>
-              <div class="card-visual" id="card-visual"></div>
-              <div class="card-sound-bridge" id="card-sound-bridge"></div>
-              <div class="card-radicals" id="card-radicals"></div>
-              <div class="card-audio-section">
-                <div class="card-divider"></div>
-                <div class="card-example">
-                  <div class="card-example-sentence" id="card-example-sentence"></div>
-                  <div class="card-example-breakdown" id="card-example-breakdown"></div>
-                </div>
-                <div class="audio-buttons-row">
-                  <button id="btn-audio" class="btn btn-sm btn-audio" title="Hear example sentence">🔊 Listen</button>
-                  <button id="btn-audio-stop" class="btn btn-sm btn-audio-stop hidden" title="Stop audio">⏹ Stop</button>
-                </div>
-                <div id="audio-picker" class="audio-picker hidden">
-                  <div class="audio-picker-variants">
-                    <button class="btn btn-sm btn-variant" data-variant="1">🔊1</button>
-                    <button class="btn btn-sm btn-variant" data-variant="2">🔊2</button>
-                    <button class="btn btn-sm btn-variant" data-variant="3">🔊3</button>
-                    <button class="btn btn-sm btn-variant" data-variant="4">🔊4</button>
-                  </div>
-                  <div class="audio-picker-actions">
-                    <button id="btn-audio-keep" class="btn btn-sm btn-audio-keep">✅ Keep</button>
-                    <button id="btn-audio-bad" class="btn btn-sm btn-audio-bad">❌ All Bad</button>
-                  </div>
-                </div>
-              </div>
+            </div>
+            <div class="card-back-mid" id="card-back-mid">
+              <div class="card-mnemonic-text" id="card-mnemonic"></div>
+              <div class="card-visual-text" id="card-visual"></div>
+              <div class="card-sound-bridge-text" id="card-sound-bridge"></div>
+            </div>
+            <div class="card-back-bottom">
+              <button id="btn-audio" class="btn btn-sm btn-audio" title="Hear pronunciation">🔊</button>
+              <div class="card-radicals-text" id="card-radicals"></div>
+              <div class="card-swipe-hint">swipe to rate</div>
             </div>
           </div>
-        </div>
-        <div id="rating-buttons" class="rating-buttons hidden">
-          <button class="btn btn-rate btn-again" data-rating="0">
-            <span class="rate-label">Again</span>
-            <span class="rate-time" id="rate-again-time"></span>
-          </button>
-          <button class="btn btn-rate btn-hard" data-rating="1">
-            <span class="rate-label">Hard</span>
-            <span class="rate-time" id="rate-hard-time"></span>
-          </button>
-          <button class="btn btn-rate btn-good" data-rating="2">
-            <span class="rate-label">Good</span>
-            <span class="rate-time" id="rate-good-time"></span>
-          </button>
-          <button class="btn btn-rate btn-easy" data-rating="3">
-            <span class="rate-label">Easy</span>
-            <span class="rate-time" id="rate-easy-time"></span>
-          </button>
         </div>
       </div>
 
@@ -288,6 +253,6 @@
   <!-- Toast Notification -->
   <div id="toast" class="toast hidden"></div>
 
-  <script src="app.js?v=2"></script>
+  <script type="module" src="./js/main.js"></script>
 </body>
 </html>

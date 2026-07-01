@@ -196,7 +196,7 @@ if __name__ == "__main__":
     class ReusableHTTPServer(HTTPServer):
         allow_reuse_address = True
         address_family = socket.AF_INET
-    server = ReusableHTTPServer(("127.0.0.1", PORT), Handler)
+    server = ReusableHTTPServer(("0.0.0.0", PORT), Handler)
     print(f"Flashcard server running on http://localhost:{PORT}")
     print(f"Data dir: {DATA_DIR}")
     print(f"Audio dir: {AUDIO_DIR}")

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Basic Test</title>
+  <link rel="stylesheet" href="style.css?v=2">
+</head>
+<body>
+  <div id="output"></div>
+  <script type="module">
+    // Simple test to see if basic JS works
+    const output = document.getElementById('output');
+    if (output) {
+      output.innerHTML = '<h2>Testing basic JavaScript...</h2>';
+      
+      // Test 1: Can we modify the DOM?
+      const testDiv = document.createElement('div');
+      testDiv.textContent = 'DOM manipulation works!';
+      testDiv.style.color = 'blue';
+      testDiv.style.padding = '10px';
+      document.body.appendChild(testDiv);
+      
+      // Test 2: Can we set up event listeners?
+      const testBtn = document.createElement('button');
+      testBtn.textContent = 'Click Me';
+      testBtn.style.margin = '10px';
+      testBtn.addEventListener('click', () => {
+        testDiv.textContent = 'Button clicked at ' + new Date().toLocaleTimeString();
+        testDiv.style.color = 'green';
+      });
+      document.body.appendChild(testBtn);
+      
+      // Test 3: Can we import our modules?
+      import('./js/config.js').then(module => {
+        output.innerHTML += '<p>✅ Config module: ' + module.CONFIG.SERVER_URL + '</p>';
+      }).catch(e => {
+        output.innerHTML += '<p>❌ Config module failed: ' + e.message + '</p>';
+      });
+      
+      // Test 4: Can we access the DOM elements from our app?
+      setTimeout(() => {
+        const themeBtn = document.getElementById('btn-theme');
+        if (themeBtn) {
+          output.innerHTML += '<p>✅ Found theme button: ' + themeBtn.textContent + '</p>';
+          // Try to click it programmatically to see if the listener works
+          testDiv.textContent = 'About to test theme button...';
+        } else {
+          output.innerHTML += '<p>ℹ️ Theme button not found yet (may load later)</p>';
+        }
+      }, 1000);
+    }
+  </script>
+</body>
+</html>
