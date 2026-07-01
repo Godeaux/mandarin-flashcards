@@ -20,8 +20,8 @@ export const Audio = {
       const audio = new window.Audio(audioPath);
 
       audio.onerror = () => {
-        // Fallback to Web Speech API if file not found
-        this._speakFallback(char);
+        // Fallback: show "no audio file yet" toast if file not found
+        this._showNoAudioToast();
         resolve();
       };
 
@@ -36,13 +36,13 @@ export const Audio = {
 
       audio.play().catch((err) => {
         console.error('Failed to play audio:', err);
-        this._speakFallback(char);
+        this._showNoAudioToast();
         reject(err);
       });
     });
   },
 
-  /** Fallback: show "no audio file yet" toast */
+  /** Fallback: show "no audio file yet" toast (3 seconds, then fade) */
   _showNoAudioToast() {
     if (typeof document === 'undefined') return;
 
@@ -71,27 +71,6 @@ export const Audio = {
       toast.style.opacity = '0';
       setTimeout(() => toast.remove(), 3000);
     }, 3000);
-  },
-
-  /** Fallback: use browser's speech synthesis */
-  _speakFallback(text) {
-    this._showNoAudioToast();
-
-    if (!('speechSynthesis' in window)) {
-      console.warn('Audio not available');
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = 'zh-CN';
-    utterance.rate = 0.8;
-
-    const voices = speechSynthesis.getVoices();
-    const zhVoice = voices.find((v) => v.lang.startsWith('zh'));
-    if (zhVoice) utterance.voice = zhVoice;
-
-    speechSynthesis.cancel();
-    speechSynthesis.speak(utterance);
   },
 
   // --- Variant Picker (audio curation) ---
