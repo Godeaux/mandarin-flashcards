@@ -1,0 +1,29 @@
+{
+  "name": "mandarin-flashcards",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "build": "esbuild app.js --bundle --minify --outfile=dist/app.min.js",
+    "build:css": "esbuild style.css --bundle --minify --outfile=dist/style.min.css",
+    "format": "prettier --write 'js/**/*.js' 'style.css'",
+    "lint": "eslint js/**/*.js",
+    "dev": "python3 -m http.server 8080 --bind 0.0.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Godeaux/mandarin-flashcards.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Godeaux/mandarin-flashcards/issues"
+  },
+  "homepage": "https://github.com/Godeaux/mandarin-flashcards#readme",
+  "devDependencies": {
+    "esbuild": "^0.28.1",
+    "eslint": "^8.57.1",
+    "prettier": "^3.9.4"
+  }
+}

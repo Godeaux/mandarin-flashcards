@@ -5,12 +5,12 @@
 import { CONFIG } from './config.js';
 
 const STORAGE_KEYS = {
-  deck: "hanzi_deck",
-  srs: "hanzi_srs",
-  session: "hanzi_session",
-  streak: "hanzi_streak",
-  theme: "hanzi_theme",
-  category: "hanzi_category"
+  deck: 'hanzi_deck',
+  srs: 'hanzi_srs',
+  session: 'hanzi_session',
+  streak: 'hanzi_streak',
+  theme: 'hanzi_theme',
+  category: 'hanzi_category',
 };
 
 export const Storage = {
@@ -44,13 +44,13 @@ export const Storage = {
     try {
       const ctrl = new AbortController();
       const timer = setTimeout(() => ctrl.abort(), 1500);
-      
-      const resp = await fetch(`${CONFIG.SERVER_URL}/progress`, { 
+
+      const resp = await fetch(`${CONFIG.SERVER_URL}/progress`, {
         signal: ctrl.signal,
-        method: 'GET'
+        method: 'GET',
       });
       clearTimeout(timer);
-      
+
       if (resp.ok) {
         this.serverAvailable = true;
         return true;
@@ -58,7 +58,7 @@ export const Storage = {
     } catch {
       // Server not available
     }
-    
+
     this.serverAvailable = false;
     return false;
   },
@@ -72,9 +72,9 @@ export const Storage = {
         return await resp.json();
       }
     } catch (e) {
-      console.error("Failed to load from server:", e);
+      console.error('Failed to load from server:', e);
     }
-    
+
     return null;
   },
 
@@ -85,10 +85,10 @@ export const Storage = {
       await fetch(`${CONFIG.SERVER_URL}/progress`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ srsData, session, streak })
+        body: JSON.stringify({ srsData, session, streak }),
       });
     } catch (e) {
-      console.error("Failed to save to server:", e);
+      console.error('Failed to save to server:', e);
     }
   },
 
@@ -101,9 +101,9 @@ export const Storage = {
         return await resp.json();
       }
     } catch (e) {
-      console.error("Failed to load audio selections:", e);
+      console.error('Failed to load audio selections:', e);
     }
-    
+
     return {};
   },
 
@@ -114,10 +114,10 @@ export const Storage = {
       await fetch(`${CONFIG.SERVER_URL}/audio-selections`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(selections)
+        body: JSON.stringify(selections),
       });
     } catch (e) {
-      console.error("Failed to save audio selections:", e);
+      console.error('Failed to save audio selections:', e);
     }
   },
 
@@ -130,9 +130,9 @@ export const Storage = {
         return await resp.json();
       }
     } catch (e) {
-      console.error("Failed to load variant data:", e);
+      console.error('Failed to load variant data:', e);
     }
-    
+
     return {};
   },
 
@@ -143,17 +143,17 @@ export const Storage = {
       const resp = await fetch(`${CONFIG.SERVER_URL}/audio/promote`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ char, variant })
+        body: JSON.stringify({ char, variant }),
       });
-      
+
       if (resp.ok) {
         const result = await resp.json();
         return result.ok;
       }
     } catch (e) {
-      console.error("Failed to promote variant:", e);
+      console.error('Failed to promote variant:', e);
     }
-    
+
     return false;
-  }
+  },
 };

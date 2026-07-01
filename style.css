@@ -29,7 +29,7 @@
   --transition: 0.25s ease;
 }
 
-[data-theme="light"] {
+[data-theme='light'] {
   --bg-primary: #f5f0e8;
   --bg-secondary: #ede7db;
   --bg-card: #ffffff;
@@ -52,7 +52,9 @@
 }
 
 /* --- Reset & Base --- */
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -68,11 +70,13 @@ html {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans SC', sans-serif;
   background: var(--bg-primary);
   color: var(--text-primary);
   height: 100%;
-  transition: background var(--transition), color var(--transition);
+  transition:
+    background var(--transition),
+    color var(--transition);
   overflow: hidden;
   -webkit-overflow-scrolling: touch;
   position: fixed;
@@ -86,7 +90,10 @@ body {
   max-width: 640px;
   margin: 0 auto;
   position: absolute;
-  top: 0; bottom: 0; left: 0; right: 0;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
   flex-direction: column;
   padding: 0 16px;
@@ -279,8 +286,14 @@ body {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .hidden {
@@ -335,7 +348,9 @@ body {
   overflow-x: auto;
   padding-bottom: 4px;
   -webkit-overflow-scrolling: touch;
-  transition: max-height 0.2s ease, opacity 0.2s ease;
+  transition:
+    max-height 0.2s ease,
+    opacity 0.2s ease;
   max-height: 40px;
   opacity: 1;
 }
@@ -425,22 +440,30 @@ body {
 }
 
 .glow-again {
-  left: 0; top: 0; bottom: 0;
+  left: 0;
+  top: 0;
+  bottom: 0;
   width: 100%;
   background: linear-gradient(to right, rgba(239, 68, 68, 0.5), transparent 60%);
 }
 .glow-easy {
-  right: 0; top: 0; bottom: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
   width: 100%;
   background: linear-gradient(to left, rgba(59, 130, 246, 0.5), transparent 60%);
 }
 .glow-good {
-  top: 0; left: 0; right: 0;
+  top: 0;
+  left: 0;
+  right: 0;
   height: 100%;
   background: linear-gradient(to bottom, rgba(16, 185, 129, 0.5), transparent 60%);
 }
 .glow-hard {
-  bottom: 0; left: 0; right: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
   height: 100%;
   background: linear-gradient(to top, rgba(249, 115, 22, 0.5), transparent 60%);
 }
@@ -454,24 +477,32 @@ body {
   z-index: 11;
   opacity: 0;
   transition: opacity 0.15s ease;
-  text-shadow: 0 1px 8px rgba(0,0,0,0.5);
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.5);
   letter-spacing: 0.5px;
 }
 
 .swipe-label-left {
-  left: 12px; top: 50%; transform: translateY(-50%);
+  left: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--accent-red);
 }
 .swipe-label-right {
-  right: 12px; top: 50%; transform: translateY(-50%);
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--accent-blue);
 }
 .swipe-label-up {
-  top: 12px; left: 50%; transform: translateX(-50%);
+  top: 12px;
+  left: 50%;
+  transform: translateX(-50%);
   color: var(--accent-green);
 }
 .swipe-label-down {
-  bottom: 12px; left: 50%; transform: translateX(-50%);
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
   color: #f97316;
 }
 
@@ -493,7 +524,9 @@ body {
 }
 
 .flashcard.animating {
-  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s ease;
+  transition:
+    transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.3s ease;
 }
 
 /* Card faces */
@@ -589,13 +622,17 @@ body {
   -webkit-box-orient: vertical;
 }
 
-.card-mnemonic-text:empty { display: none; }
+.card-mnemonic-text:empty {
+  display: none;
+}
 
 .card-visual-text {
   font-size: clamp(1.4rem, 4vh, 2rem);
   letter-spacing: 3px;
 }
-.card-visual-text:empty { display: none; }
+.card-visual-text:empty {
+  display: none;
+}
 
 .card-sound-bridge-text {
   font-size: clamp(0.9rem, 2.5vh, 1.2rem);
@@ -605,7 +642,9 @@ body {
   background: var(--accent-glow);
   border-radius: var(--radius-sm);
 }
-.card-sound-bridge-text:empty { display: none; }
+.card-sound-bridge-text:empty {
+  display: none;
+}
 
 .card-back-bottom {
   display: flex;
@@ -620,16 +659,33 @@ body {
   color: var(--text-muted);
   text-align: center;
 }
-.card-radicals-text:empty { display: none; }
+.card-radicals-text:empty {
+  display: none;
+}
 
 /* removed external swipe-hint — now inside the card */
 
 /* Swipe exit animation classes */
-.flashcard.exit-left { transform: translateX(-120%) rotate(-15deg) !important; opacity: 0 !important; }
-.flashcard.exit-right { transform: translateX(120%) rotate(15deg) !important; opacity: 0 !important; }
-.flashcard.exit-up { transform: translateY(-120%) rotate(-5deg) !important; opacity: 0 !important; }
-.flashcard.exit-down { transform: translateY(120%) rotate(5deg) !important; opacity: 0 !important; }
-.flashcard.exit-reset { transform: none !important; opacity: 1 !important; }
+.flashcard.exit-left {
+  transform: translateX(-120%) rotate(-15deg) !important;
+  opacity: 0 !important;
+}
+.flashcard.exit-right {
+  transform: translateX(120%) rotate(15deg) !important;
+  opacity: 0 !important;
+}
+.flashcard.exit-up {
+  transform: translateY(-120%) rotate(-5deg) !important;
+  opacity: 0 !important;
+}
+.flashcard.exit-down {
+  transform: translateY(120%) rotate(5deg) !important;
+  opacity: 0 !important;
+}
+.flashcard.exit-reset {
+  transform: none !important;
+  opacity: 1 !important;
+}
 
 /* --- Writing Practice --- */
 .writing-area {
@@ -1113,8 +1169,14 @@ body {
 }
 
 @keyframes slideUp {
-  from { opacity: 0; transform: translate(-50%, 20px); }
-  to { opacity: 1; transform: translate(-50%, 0); }
+  from {
+    opacity: 0;
+    transform: translate(-50%, 20px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
 }
 
 /* --- Server Status Indicator --- */

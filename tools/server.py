@@ -15,8 +15,9 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse, unquote
 
 PORT = 8787
-DATA_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "data")
-AUDIO_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "audio")
+PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+DATA_DIR = os.path.join(PROJECT_ROOT, "data")
+AUDIO_DIR = os.path.join(PROJECT_ROOT, "audio")
 VARIANTS_DIR = os.path.join(AUDIO_DIR, "variants")
 
 # Allowed origins for CORS

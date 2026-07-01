@@ -18,7 +18,7 @@ export const Audio = {
     return new Promise((resolve, reject) => {
       const audioPath = `${CONFIG.AUDIO_DIR}${encodeURIComponent(char)}.mp3`;
       const audio = new window.Audio(audioPath);
-      
+
       audio.onerror = () => {
         // Fallback to Web Speech API if file not found
         this._speakFallback(char);
@@ -33,8 +33,8 @@ export const Audio = {
 
       this._currentAudio = audio;
       this._showStopBtn();
-      
-      audio.play().catch(err => {
+
+      audio.play().catch((err) => {
         console.error('Failed to play audio:', err);
         this._speakFallback(char);
         reject(err);
@@ -42,8 +42,41 @@ export const Audio = {
     });
   },
 
+  /** Fallback: show "no audio file yet" toast */
+  _showNoAudioToast() {
+    if (typeof document === 'undefined') return;
+
+    // Create temporary toast element
+    const toast = document.createElement('div');
+    toast.className = 'audio-fallback-toast';
+    toast.textContent = 'No audio file yet';
+    toast.style.cssText = `
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0, 0, 0, 0.8);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      z-index: 9999;
+      opacity: 1;
+      transition: opacity 3s ease-out;
+    `;
+    document.body.appendChild(toast);
+
+    // Fade out after 3 seconds
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      setTimeout(() => toast.remove(), 3000);
+    }, 3000);
+  },
+
   /** Fallback: use browser's speech synthesis */
   _speakFallback(text) {
+    this._showNoAudioToast();
+
     if (!('speechSynthesis' in window)) {
       console.warn('Audio not available');
       return;
@@ -54,7 +87,7 @@ export const Audio = {
     utterance.rate = 0.8;
 
     const voices = speechSynthesis.getVoices();
-    const zhVoice = voices.find(v => v.lang.startsWith('zh'));
+    const zhVoice = voices.find((v) => v.lang.startsWith('zh'));
     if (zhVoice) utterance.voice = zhVoice;
 
     speechSynthesis.cancel();
@@ -66,7 +99,7 @@ export const Audio = {
   /** Check if a card has variants and return state */
   getVariantState(char, variantData) {
     const variants = variantData[char];
-    
+
     if (!variantData || !variants || variants.length === 0) {
       return { hasVariants: false };
     }
@@ -74,7 +107,7 @@ export const Audio = {
     return {
       hasVariants: true,
       variants,
-      selectedVariant: this.lastPlayedVariant
+      selectedVariant: this.lastPlayedVariant,
     };
   },
 
@@ -84,7 +117,7 @@ export const Audio = {
 
     const url = `${CONFIG.SERVER_URL}/audio/variants/${encodeURIComponent(char)}_v${variant}.mp3`;
     const audio = new window.Audio(url);
-    
+
     this._currentAudio = audio;
     this.lastPlayedVariant = variant;
 
@@ -93,8 +126,8 @@ export const Audio = {
     });
 
     this._showStopBtn();
-    
-    return audio.play().catch(err => {
+
+    return audio.play().catch((err) => {
       console.error(`Failed to play variant ${char}_v${variant}:`, err);
       throw new Error(`Failed to play variant`);
     });
@@ -106,11 +139,11 @@ export const Audio = {
 
     try {
       const result = await Storage.promoteVariant(char, variant);
-      
+
       if (result) {
         // Clear variants from local cache since this char now has main audio only
         delete this.variantData?.[char];
-        
+
         return true;
       }
     } catch (err) {
@@ -137,10 +170,8 @@ export const Audio = {
     // Reset variant button playing states (if DOM available)
     if (typeof document !== 'undefined') {
       try {
-        document.querySelectorAll('.btn-variant').forEach(btn => 
-          btn.classList.remove('playing')
-        );
-        
+        document.querySelectorAll('.btn-variant').forEach((btn) => btn.classList.remove('playing'));
+
         // Hide stop button
         const stopBtn = document.getElementById('btn-audio-stop');
         if (stopBtn) stopBtn.classList.add('hidden');
@@ -153,7 +184,7 @@ export const Audio = {
   /** Show the stop button */
   _showStopBtn() {
     if (typeof document === 'undefined') return;
-    
+
     const stopBtn = document.getElementById('btn-audio-stop');
     if (stopBtn) stopBtn.classList.remove('hidden');
   },
@@ -161,5 +192,5 @@ export const Audio = {
   /** Get last played variant number */
   getLastPlayedVariant() {
     return this.lastPlayedVariant;
-  }
+  },
 };

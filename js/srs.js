@@ -10,7 +10,7 @@ export const SM2 = {
       interval: 0,
       repetitions: 0,
       nextReview: null, // null means never reviewed = new card
-      known: false
+      known: false,
     };
   },
 
@@ -59,7 +59,7 @@ export const SM2 = {
 
   /** Get next interval preview for each rating */
   previewIntervals(state) {
-    return [0, 1, 2, 3].map(q => {
+    return [0, 1, 2, 3].map((q) => {
       const result = this.review(state, q);
       return result.interval;
     });
@@ -67,11 +67,11 @@ export const SM2 = {
 
   /** Format interval as human string */
   formatInterval(days) {
-    if (days === 0) return "< 1m";
-    if (days === 1) return "1d";
-    if (days < 30) return days + "d";
-    if (days < 365) return Math.round(days / 30) + "mo";
-    return (days / 365).toFixed(1) + "y";
+    if (days === 0) return '< 1m';
+    if (days === 1) return '1d';
+    if (days < 30) return days + 'd';
+    if (days < 365) return Math.round(days / 30) + 'mo';
+    return (days / 365).toFixed(1) + 'y';
   },
 
   todayStr() {
@@ -89,5 +89,5 @@ export const SM2 = {
 
   isNew(state) {
     return state.nextReview === null;
-  }
+  },
 };
