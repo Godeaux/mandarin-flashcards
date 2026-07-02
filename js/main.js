@@ -19,13 +19,9 @@ const App = {
   studyQueue: [],
   currentCardIndex: 0,
   isFlipped: false,
-  selectedCardId: null,
-  writingCard: null,
-  serverAvailable: false,
-  variantData: {},
-  audioSelections: {},
-  lastPlayedVariant: 0,
-  _currentAudio: null,
+   selectedCardId: null,
+   writingCard: null,
+   serverAvailable: false,
 
   // --- Initialization ---
 
@@ -111,7 +107,7 @@ const App = {
       }
       if (serverData.session) this.session = serverData.session;
       if (serverData.streak) this.streak = serverData.streak;
-      if (serverData.audioSelections) this.audioSelections = serverData.audioSelections;
+      // Audio selections no longer synced
     }
 
     // Ensure all cards still have SRS data after merge
@@ -126,7 +122,7 @@ const App = {
     if (!this.serverAvailable || !CONFIG.USE_SERVER) return;
 
     await Storage.saveToServer(this.srsData, this.session, this.streak);
-    await Storage.saveAudioSelections(this.audioSelections);
+    // Audio selections no longer synced
   },
 
   // --- Save All State ---
@@ -745,9 +741,6 @@ const App = {
     this.selectedCardId = null;
     this.writingCard = null;
     this.serverAvailable = false;
-    this.variantData = {};
-    this.audioSelections = {};
-    this.lastPlayedVariant = 0;
     this._currentAudio = null;
 
     this.init();

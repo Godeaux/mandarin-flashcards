@@ -9,6 +9,9 @@ export const CONFIG = {
   // Enable server features (set to false to use localStorage-only)
   USE_SERVER: false,
 
+  // Auth token key in localStorage
+  AUTH_TOKEN_KEY: 'hanzi_auth_token',
+
   // Audio settings
   AUDIO_DIR: 'audio/',
   VARIANTS_DIR: 'audio/variants/',
@@ -23,3 +26,9 @@ export const CONFIG = {
   DEFAULT_EASE_FACTOR: 2.5,
   TOAST_DURATION: 2500,
 };
+
+// Get auth token from localStorage
+export function getAuthToken() {
+  if (typeof localStorage === 'undefined') return null;
+  return localStorage.getItem(CONFIG.AUTH_TOKEN_KEY);
+}

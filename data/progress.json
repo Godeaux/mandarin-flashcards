@@ -1,0 +1,230 @@
+{
+  "srsData": {
+    "shan1": {
+      "easeFactor": 2.5,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "shui3": {
+      "easeFactor": 2.6,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "huo3": {
+      "easeFactor": 2.6,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "mu4": {
+      "easeFactor": 1.8599999999999997,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": "2026-04-02",
+      "known": false
+    },
+    "ri4": {
+      "easeFactor": 2.5,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "yue4": {
+      "easeFactor": 2.5,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "yu3": {
+      "easeFactor": 2.5,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "tian2": {
+      "easeFactor": 2.1799999999999997,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "shi2": {
+      "easeFactor": 2.1799999999999997,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "feng1": {
+      "easeFactor": 2.1799999999999997,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "ren2": {
+      "easeFactor": 1.8599999999999997,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "da4": {
+      "easeFactor": 2.1799999999999997,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "xiao3": {
+      "easeFactor": 2.5,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "kou3": {
+      "easeFactor": 2.5,
+      "interval": 1,
+      "repetitions": 1,
+      "nextReview": "2026-04-03",
+      "known": false
+    },
+    "shou3": {
+      "easeFactor": 2.1799999999999997,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": "2026-04-02",
+      "known": false
+    },
+    "mu4b": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "nv3": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "zi3": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "xin1": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "yi1": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "er4": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "san1": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "si4": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "wu3": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "hao3": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "zhong1": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "tian1": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "wang2": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "ma3": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "men2": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    },
+    "li4": {
+      "easeFactor": 2.5,
+      "interval": 0,
+      "repetitions": 0,
+      "nextReview": null,
+      "known": false
+    }
+  },
+  "session": {
+    "date": "2026-04-02",
+    "reviewed": 22,
+    "correct": 13
+  },
+  "streak": {
+    "count": 1,
+    "lastDate": "2026-04-02"
+  }
+}

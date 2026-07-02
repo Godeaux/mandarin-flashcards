@@ -1,13 +1,11 @@
 /* ============================================
-   Audio Module - Playback & variant curation
+   Audio Module - Playback
    ============================================ */
 
 import { CONFIG } from './config.js';
-import { Storage } from './storage.js';
 
 export const Audio = {
   _currentAudio: null,
-  lastPlayedVariant: 0,
 
   // --- Main Pronunciation ---
 
@@ -73,65 +71,6 @@ export const Audio = {
     }, 3000);
   },
 
-  // --- Variant Picker (audio curation) ---
-
-  /** Check if a card has variants and return state */
-  getVariantState(char, variantData) {
-    const variants = variantData[char];
-
-    if (!variantData || !variants || variants.length === 0) {
-      return { hasVariants: false };
-    }
-
-    return {
-      hasVariants: true,
-      variants,
-      selectedVariant: this.lastPlayedVariant,
-    };
-  },
-
-  /** Play a specific variant */
-  playVariant(char, variant) {
-    this.stop();
-
-    const url = `${CONFIG.SERVER_URL}/audio/variants/${encodeURIComponent(char)}_v${variant}.mp3`;
-    const audio = new window.Audio(url);
-
-    this._currentAudio = audio;
-    this.lastPlayedVariant = variant;
-
-    audio.addEventListener('ended', () => {
-      this.stop();
-    });
-
-    this._showStopBtn();
-
-    return audio.play().catch((err) => {
-      console.error(`Failed to play variant ${char}_v${variant}:`, err);
-      throw new Error(`Failed to play variant`);
-    });
-  },
-
-  /** Promote a variant as the main audio for this character */
-  async promoteVariant(char, variant) {
-    if (!CONFIG.USE_SERVER || !Storage.serverAvailable) return false;
-
-    try {
-      const result = await Storage.promoteVariant(char, variant);
-
-      if (result) {
-        // Clear variants from local cache since this char now has main audio only
-        delete this.variantData?.[char];
-
-        return true;
-      }
-    } catch (err) {
-      console.error('Failed to promote variant:', err);
-    }
-
-    return false;
-  },
-
   // --- Utilities ---
 
   /** Stop any currently playing audio */
@@ -166,10 +105,5 @@ export const Audio = {
 
     const stopBtn = document.getElementById('btn-audio-stop');
     if (stopBtn) stopBtn.classList.remove('hidden');
-  },
-
-  /** Get last played variant number */
-  getLastPlayedVariant() {
-    return this.lastPlayedVariant;
   },
 };
