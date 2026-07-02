@@ -1,21 +1,2 @@
-# Local server data
-data/
-audio/variants/
-
-# Python
-__pycache__/
-*.pyc
-
-# Whisper artifacts
-audio/*.json
-audio/*.srt
-audio/*.tsv
-audio/*.txt
-audio/*.vtt
-audio/*_test.mp3
-
-# Node modules (dev dependencies)
-node_modules/
-
-# Built output
-dist/
+app.js
+.ai-memory/
