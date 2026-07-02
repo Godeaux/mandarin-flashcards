@@ -978,12 +978,21 @@ const App = {
       if (now - lastTapTime < 200) return;
       lastTapTime = now;
 
+      // Reset mouseDown immediately so hover doesn't trigger dragging
+      mouseDown = false;
+
       if (!isDragging) {
         // It was a tap - toggle the card face
         this.revealCard();
+        // Reset position state for tap
+        startX = 0;
+        startY = 0;
+        dx = 0;
+        dy = 0;
         return;
       }
 
+      // Calculate abs values BEFORE resetting dx/dy
       const absDx = Math.abs(dx);
       const absDy = Math.abs(dy);
 
@@ -1026,8 +1035,7 @@ const App = {
       document.querySelectorAll('.swipe-glow').forEach((g) => (g.style.opacity = 0));
       document.querySelectorAll('.swipe-label').forEach((l) => (l.style.opacity = 0));
       
-      // Reset all drag state
-      mouseDown = false;
+      // Reset position state after all checks are done
       startX = 0;
       startY = 0;
       dx = 0;
