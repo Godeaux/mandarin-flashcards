@@ -329,26 +329,6 @@ const App = {
   // --- Manage View Events ---
 
   bindManageEvents() {
-    // Add custom card form
-    const addCardForm = document.getElementById('add-card-form');
-    if (addCardForm) {
-      addCardForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        this.addCustomCard();
-      });
-    }
-
-    // Import/Export
-    document.getElementById('btn-export')?.addEventListener('click', () => this.exportDeck());
-    document.getElementById('btn-import')?.addEventListener('click', () => {
-      document.getElementById('import-file')?.click();
-    });
-
-    const importFile = document.getElementById('import-file');
-    if (importFile) {
-      importFile.addEventListener('change', (e) => this.importDeck(e));
-    }
-
     // Reset buttons
     document.getElementById('btn-reset-progress')?.addEventListener('click', () => {
       if (confirm('Reset all progress? This cannot be undone.')) {
@@ -918,6 +898,7 @@ const App = {
       dx = 0,
       dy = 0,
       isDragging = false;
+    let mouseDown = false; // track if mouse button is pressed
     let lastTapTime = 0;
     let tapTarget = null; // track what element was tapped
 
@@ -926,6 +907,7 @@ const App = {
       // Don't interfere with audio button clicks
       if (e.target.closest('#btn-audio')) return;
       isDragging = false;
+      mouseDown = true; // mark that button is pressed
       const touch = e.touches ? e.touches[0] : e;
       startX = touch.clientX;
       startY = touch.clientY;
@@ -935,6 +917,8 @@ const App = {
     };
 
     const onMove = (e) => {
+      // Only drag if mouse button is actually pressed
+      if (!mouseDown) return;
       if (!startX && !startY) return;
       const touch = e.touches ? e.touches[0] : e;
       dx = touch.clientX - startX;
@@ -1041,23 +1025,28 @@ const App = {
       // Reset glows
       document.querySelectorAll('.swipe-glow').forEach((g) => (g.style.opacity = 0));
       document.querySelectorAll('.swipe-label').forEach((l) => (l.style.opacity = 0));
+      
+      // Reset all drag state
+      mouseDown = false;
+      startX = 0;
+      startY = 0;
+      dx = 0;
+      dy = 0;
     };
-
-    // Touch events
-    card.addEventListener('touchstart', onStart, { passive: true });
-    card.addEventListener('touchmove', onMove, { passive: false });
-    card.addEventListener('touchend', (e) => {
-      onEnd();
-      // Prevent the synthetic mouse event that follows touch events
-      e.preventDefault();
-    });
-    card.addEventListener('touchcancel', onEnd);
-
     // Mouse events (desktop only — touch events call preventDefault to avoid duplicates)
     card.addEventListener('mousedown', onStart);
     card.addEventListener('mousemove', onMove);
     card.addEventListener('mouseup', onEnd);
     card.addEventListener('mouseleave', onEnd);
+
+    // Touch events
+    card.addEventListener('touchstart', (e) => {
+      onStart(e);
+      mouseDown = true;
+    }, { passive: true });
+    card.addEventListener('touchmove', onMove, { passive: false });
+    card.addEventListener('touchend', onEnd);
+    card.addEventListener('touchcancel', onEnd);
   },
 };
 
